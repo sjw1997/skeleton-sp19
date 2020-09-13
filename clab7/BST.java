@@ -12,6 +12,21 @@ public class BST<Key extends Comparable<Key>> {
     }
 
     /**
+     * Returns the average depth of this BST.
+     */
+    public double averageDepth() {
+        return averageDepth(root, 0) / size(root);
+    }
+
+    private double averageDepth(Node x, int depth) {
+        if (x == null) {
+            return 0;
+        }
+        return depth + averageDepth(x.left, depth + 1)
+                + averageDepth(x.right, depth + 1);
+    }
+
+    /**
      * Returns the number of keys in this BST.
      * @return the number of keys in this BST
      */

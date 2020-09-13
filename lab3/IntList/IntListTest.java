@@ -2,6 +2,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import javax.print.DocFlavor;
+
 public class IntListTest {
 
     /**
@@ -64,6 +66,31 @@ public class IntListTest {
         IntList exp = IntList.of(1, 2, 3, 4, 5, 6);
         assertEquals(exp, IntList.catenate(A, B));
         assertEquals(IntList.of(1, 2, 3), A);
+    }
+
+    @Test
+    public void testReverse() {
+        IntList input = IntList.of(1, 2, 3);
+        IntList actual = IntList.reverse(input);
+        IntList exp = IntList.of(3, 2, 1);
+        assertEquals(exp, actual);
+
+        IntList input2 = IntList.of(1, 3, 4, 9);
+        IntList actual2 = IntList.reverse(input2);
+        IntList exp2 = IntList.of(9, 4, 3, 1);
+        assertEquals(exp2, actual2);
+
+        IntList input3 = null;
+        IntList actual3 = IntList.reverse(input3);
+        IntList exp3 = null;
+        assertEquals(exp3, actual3);
+    }
+
+    @Test
+    public void temp() {
+        IntList o1 = new IntList(1, null);
+        IntList o2 = new IntList(1, null);
+        assertEquals(o1, o2);
     }
 
     /** If you're running this from the command line, you'll need

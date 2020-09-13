@@ -1,5 +1,9 @@
 package hw3.hash;
 
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class OomageTestUtility {
@@ -12,6 +16,28 @@ public class OomageTestUtility {
          * and ensure that no bucket has fewer than N / 50
          * Oomages and no bucket has more than N / 2.5 Oomages.
          */
-        return false;
+        List<Oomage>[] buckets = new List[M];
+        for (int i = 0; i < M; i++) {
+            buckets[i] = new LinkedList<>();
+        }
+        for (Oomage o: oomages) {
+            if (o == null) {
+                throw new NullPointerException("can't add null" +
+                        "to list");
+            }
+            int index = (o.hashCode() & 0x7fffffff) % M;
+            if (!buckets[index].contains(o)) {
+                buckets[index].add(o);
+            }
+        }
+        int N = oomages.size();
+        double lowBound = N / 50, highBound = N / 2.5;
+        for (List each: buckets) {
+            int len = each.size();
+            if (len < lowBound || len > highBound) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -27,6 +27,6 @@ public class ExperimentHelper {
      * @return
      */
     public static double optimalAverageDepth(int N) {
-        return 0;
+        return Math.log(N);
     }
 }
