@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.QuickUnionUF;
 
 public class MergeSort {
     /**
@@ -42,8 +43,13 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
-        // Your code here!
-        return null;
+        Queue<Queue<Item>> res = new Queue<>();
+        for (Item item : items) {
+            Queue<Item> temp = new Queue<>();
+            temp.enqueue(item);
+            res.enqueue(temp);
+        }
+        return res;
     }
 
     /**
@@ -61,8 +67,11 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
-        // Your code here!
-        return null;
+        Queue<Item> res = new Queue<>();
+        while (!q1.isEmpty() || !q2.isEmpty()) {
+            res.enqueue(getMin(q1, q2));
+        }
+        return res;
     }
 
     /**
@@ -77,7 +86,55 @@ public class MergeSort {
      */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+        Queue<Queue<Item>> singles = makeSingleItemQueues(items);
+        while (singles.size() > 1) {
+            Queue<Item> q1 = singles.dequeue(), q2 = singles.dequeue();
+            singles.enqueue(mergeSortedQueues(q1, q2));
+        }
+        return singles.dequeue();
+    }
+
+    public static void mergeSortArray(Comparable[] items) {
+        Comparable[] aux = new Comparable[items.length];
+        mergeSortArrayHelper(items, aux, 0, items.length - 1);
+    }
+
+    private static void mergeSortArrayHelper(Comparable[] items, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) {
+            return;
+        }
+        int mid = (lo + hi) / 2;
+        mergeSortArrayHelper(items, aux, lo, mid);
+        mergeSortArrayHelper(items, aux, mid + 1, hi);
+        mergeArray(items, aux, lo, mid, hi);
+    }
+
+    private static void mergeArray(Comparable[] items, Comparable[] aux, int lo, int mid, int hi) {
+        int i = lo, j = mid + 1, k = lo;
+        while (i <= mid && j <= hi) {
+            int cmp = items[i].compareTo(items[j]);
+            if (cmp < 0) {
+                aux[k++] = items[i++];
+            } else {
+                aux[k++] = items[j++];
+            }
+        }
+        while (i <= mid) {
+            aux[k++] = items[i++];
+        }
+        while (j <= hi) {
+            aux[k++] = items[j++];
+        }
+        for (i = lo; i <= hi; i++) {
+            items[i] = aux[i];
+        }
+    }
+
+    public static void main(String[] args) {
+        Integer[] a = new Integer[]{10, 9, 8, 7, 6};
+        MergeSort.mergeSortArray(a);
+        for (int i : a) {
+            System.out.print(i + " ");
+        }
     }
 }

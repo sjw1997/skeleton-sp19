@@ -23,8 +23,25 @@ public class SeparableEnemySolver {
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-        // TODO: Fix me
-        return false;
+        Set<String> lables = g.labels();
+        Set<String>[] groups = new Set[2];
+        groups[0] = new HashSet<>();
+        groups[1] = new HashSet<>();
+
+        for (String s : lables) {
+            if (!groups[0].contains(s) && !groups[1].contains(s)) {
+                groups[0].add(s);
+            }
+            int other = groups[0].contains(s) ? 1 : 0;
+            for (String neighbor : g.neighbors(s)) {
+                if (groups[1 - other].contains(neighbor)) {
+                    return false;
+                } else {
+                    groups[other].add(neighbor);
+                }
+            }
+        }
+        return true;
     }
 
 

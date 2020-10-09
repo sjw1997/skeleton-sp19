@@ -1,4 +1,7 @@
 import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.QuickUnionUF;
+
+import javax.management.MBeanRegistration;
 
 public class QuickSort {
     /**
@@ -57,7 +60,19 @@ public class QuickSort {
     private static <Item extends Comparable> void partition(
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
-        // Your code here!
+        if (unsorted.isEmpty()) {
+            return;
+        }
+        for (Item item : unsorted) {
+            int cmp = item.compareTo(pivot);
+            if (cmp < 0) {
+                less.enqueue(item);
+            } else if (cmp == 0) {
+                equal.enqueue(item);
+            } else {
+                greater.enqueue(item);
+            }
+        }
     }
 
     /**
@@ -68,7 +83,61 @@ public class QuickSort {
      */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+        if (items == null || items.isEmpty()) {
+            return items;
+        }
+        Item pivot = getRandomItem(items);
+        Queue<Item> less = new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        partition(items, pivot, less, equal, greater);
+        less = quickSort(less);
+        greater = quickSort(greater);
+        return catenate(catenate(less, equal), greater);
+    }
+
+    public static void quickSortArray(int[] items) {
+        quickSortArrayHelper(items, 0, items.length - 1);
+    }
+
+    private static void quickSortArrayHelper(int[] items, int lo, int hi) {
+        if (hi <= lo) {
+            return;
+        }
+        int j = partitionArray(items, lo, hi);
+        quickSortArrayHelper(items, lo, j - 1);
+        quickSortArrayHelper(items, j + 1, hi);
+    }
+
+    private static int partitionArray(int[] items, int lo, int hi) {
+        int pivot = items[lo];
+        int i = lo, j = hi + 1;
+        while (true) {
+            while (items[++i] < pivot) {
+                if (i == hi) {
+                    break;
+                }
+            }
+            while (items[--j] > pivot) {
+
+            }
+            if (i >= j) {
+                break;
+            }
+            int temp = items[i];
+            items[i] = items[j];
+            items[j] = temp;
+        }
+        items[lo] = items[j];
+        items[j] = pivot;
+        return j;
+    }
+
+    public static void main(String[] args) {
+        int[] a = new int[]{10, 9, 8, 6};
+        quickSortArray(a);
+        for (int num : a) {
+            System.out.println(num);
+        }
     }
 }

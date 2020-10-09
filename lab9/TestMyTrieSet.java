@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,6 +53,25 @@ public class TestMyTrieSet {
         }
         for (String s: otherStrings) {
             assertFalse(keys.contains(s));
+        }
+    }
+
+    @Test
+    public void sanityCollectTest() {
+        List<String> ans = new LinkedList<>();
+        ans.add("this");
+        ans.add("is");
+        ans.add("a");
+        ans.add("test");
+
+        MyTrieSet t = new MyTrieSet();
+        for (String s : ans) {
+            t.add(s);
+        }
+
+        List<String> keys = t.collect();
+        for (String s : keys) {
+            assertTrue(ans.contains(s));
         }
     }
 
